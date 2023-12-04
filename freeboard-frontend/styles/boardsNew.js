@@ -146,3 +146,9 @@ export const SubmitButton = styled.button`
   font-size: 16px;
   font-weight: 600;
 `;
+
+export const Error = styled.div`
+  padding-top: 10px;
+  font-size: 14px;
+  color: blue;
+`;
