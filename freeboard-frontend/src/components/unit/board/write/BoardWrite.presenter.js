@@ -1,10 +1,6 @@
 import * as S from './BoardWrite.styles';
 
 export default function BoardWriteUI({
-  writer,
-  password,
-  title,
-  contents,
   writerError,
   passwordError,
   titleError,
@@ -14,18 +10,23 @@ export default function BoardWriteUI({
   onChangeTitle,
   onChangeContents,
   onClickSubmit,
+  onClickUpdate,
+  isEdit,
+  data,
 }) {
   return (
     <S.Wrapper>
-      <S.Title>게시글 등록</S.Title>
+      <S.Title>게시글 {isEdit ? '수정' : '등록'}</S.Title>
       <S.WriterWrapper>
         <S.InputWrapper>
           <S.Label>작성자</S.Label>
           <S.Writer
-            value={writer}
-            onChange={onChangeWriter}
+            // value={writer}
+            onChange={onChangeWriter} // value를 설정하지 않아도, event에 의해 글자는 써짐, 데이터 조작 위한 setState에서의 state값과는 별개인 것.
             type="text"
             placeholder="이름을 입력하세요"
+            defaultValue={data?.fetchBoard.writer}
+            readOnly={data?.fetchBoard.writer}
           ></S.Writer>
           <S.Error>{writerError}</S.Error>
         </S.InputWrapper>
@@ -34,7 +35,7 @@ export default function BoardWriteUI({
           <S.Password
             type="password"
             placeholder="비밀번호를 입력하세요"
-            value={password}
+            // value={password}
             onChange={onChangePassword}
           ></S.Password>
           <S.Error>{passwordError}</S.Error>
@@ -43,19 +44,21 @@ export default function BoardWriteUI({
       <S.InputWrapper>
         <S.Label>제목</S.Label>
         <S.Subject
-          value={title}
+          //   value={title}
           onChange={onChangeTitle}
           type="text"
           placeholder="제목을 입력하세요"
+          defaultValue={data?.fetchBoard.title}
         ></S.Subject>
         <S.Error>{titleError}</S.Error>
       </S.InputWrapper>
       <S.InputWrapper>
         <S.Label>내용</S.Label>
         <S.Contents
-          value={contents}
+          //   value={contents}
           onChange={onChangeContents}
           placeholder="내용을 입력하세요"
+          defaultValue={data?.fetchBoard.contents}
         ></S.Contents>
         <S.Error>{contentsError}</S.Error>
       </S.InputWrapper>
@@ -89,7 +92,9 @@ export default function BoardWriteUI({
         <S.RadioLabel htmlFor="image">사진</S.RadioLabel>
       </S.OptionWrapper>
       <S.SubmitWrapper>
-        <S.SubmitButton onClick={onClickSubmit}>등록하기</S.SubmitButton>
+        <S.SubmitButton onClick={isEdit ? onClickUpdate : onClickSubmit}>
+          {isEdit ? '수정하기' : '등록하기'}
+        </S.SubmitButton>
       </S.SubmitWrapper>
     </S.Wrapper>
   );

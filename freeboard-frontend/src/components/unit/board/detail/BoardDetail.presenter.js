@@ -1,7 +1,7 @@
 import * as S from './BoardDetail.styles';
-// import { getDate } from '../../../../../src/commons/libraries/utils'
+import { getDate } from '../../../../commons/libraries/utils';
 
-export default function BoardDetailUI({ data }) {
+export default function BoardDetailUI({ data, onClickMoveUpdate }) {
   return (
     <S.Wrapper>
       <S.CardWrapper>
@@ -10,10 +10,7 @@ export default function BoardDetailUI({ data }) {
             <S.Avatar src="/images/avatar.png" />
             <S.Info>
               <S.Writer>{data?.fetchBoard?.writer}</S.Writer>
-              <S.CreatedAt>
-                {/* {getDate(props.data?.fetchBoard?.createdAt)} */}
-                {data?.fetchBoard?.createdAt}
-              </S.CreatedAt>
+              <S.CreatedAt>{getDate(data?.fetchBoard?.createdAt)}</S.CreatedAt>
             </S.Info>
           </S.AvatarWrapper>
         </S.Header>
@@ -24,7 +21,7 @@ export default function BoardDetailUI({ data }) {
       </S.CardWrapper>
       <S.BottomWrapper>
         <S.Button>목록으로</S.Button>
-        <S.Button>수정하기</S.Button>
+        <S.Button onClick={onClickMoveUpdate}>수정하기</S.Button>
         <S.Button>삭제하기</S.Button>
       </S.BottomWrapper>
     </S.Wrapper>
