@@ -6,14 +6,23 @@ import {
   //   DELETE_BOARD_COMMENT,
   FETCH_BOARD_COMMENTS,
 } from './BoardCommentList.queries';
+import {
+  IQuery,
+  IQueryFetchBoardCommentsArgs,
+} from '../../../../commons/types/generated/types';
 
 export default function BoardCommentList() {
   const router = useRouter();
+  if (typeof router.query.boardId !== 'string') return <></>;
+
   //   if (typeof router.query.boardId !== 'string') return <></>;
 
   //   const [deleteBoardComment] = useMutation(DELETE_BOARD_COMMENT);
 
-  const { data } = useQuery(FETCH_BOARD_COMMENTS, {
+  const { data } = useQuery<
+    Pick<IQuery, 'fetchBoardComments'>,
+    IQueryFetchBoardCommentsArgs
+  >(FETCH_BOARD_COMMENTS, {
     variables: { boardId: router.query.boardId },
   });
   const onClickDelete = () => {};
@@ -44,5 +53,10 @@ export default function BoardCommentList() {
   //     }
   //   };
 
-  return <BoardCommentListUI data={data} onClickDelete={onClickDelete} />;
+  return (
+    <BoardCommentListUI
+      data={data}
+      // onClickDelete={onClickDelete}
+    />
+  );
 }

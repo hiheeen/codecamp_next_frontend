@@ -1,7 +1,10 @@
 import { getDate } from '../../../../commons/libraries/utils';
 import * as S from './BoardCommentList.styles';
+import { IBoardCommentListProps } from './BoardCommentList.types';
 
-export default function BoardCommentListUI({ data, onClickDelete }) {
+export default function BoardCommentListUI({
+  data,
+}: IBoardCommentListProps): JSX.Element {
   return (
     <div>
       {data?.fetchBoardComments?.map((el) => (
@@ -19,7 +22,7 @@ export default function BoardCommentListUI({ data, onClickDelete }) {
               <S.DeleteIcon
                 id={el?._id}
                 src="/images/boardComment/list/option_delete_icon.png/"
-                onClick={onClickDelete}
+                // onClick={onClickDelete}
               />
             </S.OptionWrapper>
           </S.FlexWrapper>
