@@ -10,6 +10,7 @@ import {
   IMutationCreateBoardArgs,
   IMutationUpdateBoardArgs,
 } from '../../../../commons/types/generated/types';
+import type { Address } from 'react-daum-postcode';
 
 export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
   const [writer, setWriter] = useState('');
@@ -21,6 +22,11 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
   const [titleError, setTitleError] = useState('');
   const [contentsError, setContentsError] = useState('');
   const [isActive, setIsActive] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [address, setAddress] = useState('');
+  const [addressDetail, setAddressDetail] = useState('');
+  const [zonecode, setZonecode] = useState('');
+
   const [createBoard] = useMutation<
     Pick<IMutation, 'createBoard'>,
     IMutationCreateBoardArgs
@@ -121,6 +127,11 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
               writer,
               contents,
               password,
+              boardAddress: {
+                zipcode: zonecode,
+                address,
+                addressDetail,
+              },
             },
           },
         });
@@ -137,7 +148,7 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
   };
 
   const onClickUpdate = async () => {
-    if (!title && !contents) {
+    if (!contents && !address && !addressDetail) {
       alert('수정된 내용이 없습니다');
       return;
     }
@@ -146,7 +157,11 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
       return;
     }
 
-    const updateBoardInput: IUpdateBoardInput = {};
+    const updateBoardInput: IUpdateBoardInput = { boardAddress: {} };
+    if (address) updateBoardInput.boardAddress.address = address;
+    if (zonecode) updateBoardInput.boardAddress.zipcode = zonecode;
+    if (addressDetail)
+      updateBoardInput.boardAddress.addressDetail = addressDetail;
     if (title) updateBoardInput.title = title;
     if (contents) updateBoardInput.contents = contents;
 
@@ -172,6 +187,18 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
       if (error instanceof Error) console.log(error.message);
     }
   };
+  const onToggleAddressModal = (): void => {
+    setIsOpen(!isOpen);
+  };
+  const onSearchAddressComplete = (data: Address) => {
+    setAddress(data.address);
+    setZonecode(data.zonecode);
+    setIsOpen(!isOpen);
+  };
+
+  const onChangeAddressDetail = (event: ChangeEvent<HTMLInputElement>) => {
+    setAddressDetail(event.target.value);
+  };
   const propsForBoardWriteUI = {
     writer,
     password,
@@ -187,9 +214,15 @@ export default function BoardWrite({ isEdit, data }: IBoardWriteProps) {
     onChangeContents,
     onClickSubmit,
     onClickUpdate,
+    onToggleAddressModal,
+    onSearchAddressComplete,
+    onChangeAddressDetail,
+    isOpen,
     isEdit,
     isActive,
     data,
+    address,
+    zonecode,
   };
   return <BoardWriteUI {...propsForBoardWriteUI} />;
 }

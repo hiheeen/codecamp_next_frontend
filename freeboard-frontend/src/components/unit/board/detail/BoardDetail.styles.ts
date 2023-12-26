@@ -42,7 +42,10 @@ export const Info = styled.div`
   flex-direction: column;
   justify-content: center;
 `;
-
+export const IconWrapper = styled.div`
+  text-align: center;
+`;
+export const LocationIcon = styled.img``;
 export const Writer = styled.div``;
 
 export const CreatedAt = styled.div``;

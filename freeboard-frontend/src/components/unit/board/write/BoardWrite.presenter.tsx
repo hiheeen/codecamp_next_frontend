@@ -1,6 +1,7 @@
+import { Modal } from 'antd';
 import * as S from './BoardWrite.styles';
 import { IBoardWriteUIProps } from './BoardWrite.types';
-
+import DaumPostcodeEmbed from 'react-daum-postcode';
 export default function BoardWriteUI({
   writerError,
   passwordError,
@@ -12,9 +13,15 @@ export default function BoardWriteUI({
   onChangeContents,
   onClickSubmit,
   onClickUpdate,
+  onToggleAddressModal,
+  onSearchAddressComplete,
+  onChangeAddressDetail,
+  isOpen,
   isEdit,
   isActive,
   data,
+  address,
+  zonecode,
 }: IBoardWriteUIProps) {
   return (
     <S.Wrapper>
@@ -67,11 +74,45 @@ export default function BoardWriteUI({
       <S.InputWrapper>
         <S.Label>주소</S.Label>
         <S.ZipCodeWrapper>
-          <S.ZipCode placeholder="05729" />
-          <S.SearchButton>우편번호 검색</S.SearchButton>
+          <S.ZipCode
+            placeholder="05729"
+            readOnly
+            // value={
+            //   data ? data?.fetchBoard?.boardAddress?.zipcode ?? '' : zonecode
+            // }
+            value={
+              zonecode !== ''
+                ? zonecode
+                : data?.fetchBoard?.boardAddress?.zipcode ?? ''
+            }
+            defaultValue={data?.fetchBoard?.boardAddress?.zipcode ?? ''}
+          />
+          <S.SearchButton onClick={onToggleAddressModal}>
+            우편번호 검색
+          </S.SearchButton>
         </S.ZipCodeWrapper>
-        <S.Address></S.Address>
-        <S.Address></S.Address>
+        {isOpen && (
+          <Modal open={isOpen} onCancel={onToggleAddressModal}>
+            <DaumPostcodeEmbed onComplete={onSearchAddressComplete} />
+          </Modal>
+        )}
+        <S.Address
+          readOnly
+          value={
+            address !== ''
+              ? address
+              : data?.fetchBoard?.boardAddress?.address ?? ''
+          }
+          // setState로 address가 들어오면, 즉 등록할 때 입력값이나 수정할때의 수정값이나
+          // 모달을 켜서 value를 직접 준 경우에는 빈 문자열이 아니게 되니 그대로 value에 넣어주고,
+          // 아닌경우는 data가 들어온 수정페이지의 첫 화면 뿐이니 상대값으로 주고,
+          // 또한 데이터에 존재하지 않거나 하여 null/undefined일 경우에는 빈 문자열을 준다
+          defaultValue={data?.fetchBoard?.boardAddress?.address ?? ''}
+        ></S.Address>
+        <S.Address
+          defaultValue={data?.fetchBoard?.boardAddress?.addressDetail ?? ''}
+          onChange={onChangeAddressDetail}
+        ></S.Address>
       </S.InputWrapper>
       <S.InputWrapper>
         <S.Label>유튜브</S.Label>

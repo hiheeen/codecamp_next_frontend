@@ -1,7 +1,12 @@
 import * as S from './BoardDetail.styles';
 import { getDate } from '../../../../commons/libraries/utils';
+import { Tooltip } from 'antd';
+import { IBoardDetailUIProps } from './BoardDetail.types';
 
-export default function BoardDetailUI({ data, onClickMoveUpdate }) {
+export default function BoardDetailUI({
+  data,
+  onClickMoveUpdate,
+}: IBoardDetailUIProps) {
   return (
     <S.Wrapper>
       <S.CardWrapper>
@@ -13,6 +18,16 @@ export default function BoardDetailUI({ data, onClickMoveUpdate }) {
               <S.CreatedAt>{getDate(data?.fetchBoard?.createdAt)}</S.CreatedAt>
             </S.Info>
           </S.AvatarWrapper>
+          <S.IconWrapper>
+            <Tooltip
+              placement="topRight"
+              title={`${data?.fetchBoard.boardAddress?.address ?? ''} ${
+                data?.fetchBoard.boardAddress?.addressDetail ?? ''
+              }`}
+            >
+              <S.LocationIcon src="/images/board/detail/location.png" />
+            </Tooltip>
+          </S.IconWrapper>
         </S.Header>
         <S.Body>
           <S.Title>{data?.fetchBoard?.title}</S.Title>

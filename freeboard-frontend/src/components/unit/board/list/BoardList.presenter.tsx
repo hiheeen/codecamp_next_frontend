@@ -21,7 +21,7 @@ export default function BoardListUI({
           <S.ColumnBasic>
             {String(el._id).slice(-4).toUpperCase()}
           </S.ColumnBasic>
-          <S.ColumnTitle id={el._id} onClick={onClickMoveToBoardDetail}>
+          <S.ColumnTitle onClick={() => onClickMoveToBoardDetail(el._id)}>
             {el.title}
           </S.ColumnTitle>
           <S.ColumnBasic>{el.writer}</S.ColumnBasic>
